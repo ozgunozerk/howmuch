@@ -144,7 +144,7 @@ the code is written the way it is.
   deliberate choice. These config files might be confusing for the ones who will create their own
   firebase project (these config files are generated automatically). And sharing them here will
   serve no purpose for the development of the app.
-- the code for the firebase backend can be found in this repo: #TODO
+- the code for the firebase backend can be found in this [repo](https://github.com/ozgunozerk/howmuch_firebase)
 
 ## Non-code contributors (alphabetical order)
 
