@@ -7,6 +7,7 @@ class CategoryGraph extends StatelessWidget {
   final List<double> dataPoints;
   final List<Color> gradientColors;
   final Color lineColor;
+
   // final bool? enableTouch;
 
   const CategoryGraph({
@@ -74,12 +75,9 @@ class CategoryGraph extends StatelessWidget {
                     ),
                   ),
                 ],
-                // note: disabled LineTouchData due to can't make it work it Obx (with currencyController)
-                // lineTouchData: LineTouchData(
-                //     enabled: enableTouch!,
-                //     touchTooltipData: const LineTouchTooltipData(
-                //         fitInsideHorizontally: true,
-                //         fitInsideVertically: true)),
+                lineTouchData: const LineTouchData(
+                  enabled: false,
+                ),
               ),
             ),
           ),
