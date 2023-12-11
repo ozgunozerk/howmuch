@@ -379,7 +379,7 @@ class ReportController extends GetxController {
     // Sort the assets by rate change
     assets.sort((a, b) {
       // Compare rate change in descending order
-      return b.report.profit.compareTo(a.report.profit);
+      return b.report.rateChange.compareTo(a.report.rateChange);
     });
 
     Map<Category, List<AssetItem>> topGainersPerCategory = {};
@@ -401,7 +401,7 @@ class ReportController extends GetxController {
       .take(5)
       .toList();
 
-  List<AssetItem> get topLosers => _topGainers
+  List<AssetItem> get topLosers => _topGainers.reversed
       .where((element) => element.report.rateChange.isNegative)
       .take(5)
       .toList();
