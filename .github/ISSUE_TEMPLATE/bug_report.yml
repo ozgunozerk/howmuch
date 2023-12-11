@@ -1,0 +1,31 @@
+name: 🐞 Bug report
+description: Create a report to help HowMuch improve
+title: "🐞 [Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Briefly describe the issue you're experiencing.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: if you want, you can include screenshots as well :)
+    validations:
+      required: true
+  - type: checkboxes
+    id: platform
+    attributes:
+      label: platform
+      description: On which platform did this bug emerge?
+      options:
+        - label: Android
+          required: false
+        - label: iOS
+          required: false
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead?
