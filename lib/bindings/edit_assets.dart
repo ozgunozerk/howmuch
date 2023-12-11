@@ -6,7 +6,7 @@ import 'package:how_much/controllers/add/new_category.dart';
 class EditAssetsBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(AddNewAssetController());
-    Get.put(AddNewCategoryController());
+    Get.put(AddNewAssetController(), permanent: true);
+    Get.put(AddNewCategoryController(), permanent: true);
   }
 }

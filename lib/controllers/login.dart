@@ -72,11 +72,11 @@ class LoginController extends GetxController {
     // initialize these controllers after successful login immediately
 
     // we need this for being able to map asset symbols to names
-    Get.put(AssetTableController());
+    Get.put(AssetTableController(), permanent: true);
 
     // this is for snapshot controller to be able to fetch prices
     PriceTablesController priceTablesController =
-        Get.put(PriceTablesController());
+        Get.put(PriceTablesController(), permanent: true);
     if (priceTablesController.loading.value) {
       // Wait until priceTableController.loading becomes false
       await priceTablesController.loading.stream
@@ -85,7 +85,8 @@ class LoginController extends GetxController {
 
     // snapshots are needed for creating the report, and for the userAssets
     // this is also setting the `newUser` observable
-    SnapshotsController snapshotsController = Get.put(SnapshotsController());
+    SnapshotsController snapshotsController =
+        Get.put(SnapshotsController(), permanent: true);
     if (snapshotsController.loading.value) {
       // Wait until snapshotsController.loading becomes false
       await snapshotsController.loading.stream
@@ -93,7 +94,8 @@ class LoginController extends GetxController {
     }
 
     // this controls what will be displayed in the dashboard, along with the report
-    UserAssetsController userAssetsController = Get.put(UserAssetsController());
+    UserAssetsController userAssetsController =
+        Get.put(UserAssetsController(), permanent: true);
     if (userAssetsController.loading.value) {
       // Wait until userAssetsController.loading becomes false
       await userAssetsController.loading.stream
@@ -101,10 +103,11 @@ class LoginController extends GetxController {
     }
 
     // date controller will set the dates for Report Controller
-    Get.put(DateController());
+    Get.put(DateController(), permanent: true);
 
     // we need report controller for both edit assets screen and for dashboard
-    ReportController reportController = Get.put(ReportController());
+    ReportController reportController =
+        Get.put(ReportController(), permanent: true);
     if (reportController.loading.value) {
       // Wait until reportController.loading becomes false
       await reportController.loading.stream
@@ -112,12 +115,12 @@ class LoginController extends GetxController {
     }
 
     // this lets us display the total amount in other currencies
-    Get.put(CurrencyController());
+    Get.put(CurrencyController(), permanent: true);
 
     if (snapshotsController.newUser) {
-      Get.toNamed('/intro');
+      Get.offAllNamed('/intro');
     } else {
-      Get.toNamed('/dashboard');
+      Get.offAllNamed('/dashboard');
     }
   }
 

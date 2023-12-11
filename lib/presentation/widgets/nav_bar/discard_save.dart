@@ -40,7 +40,7 @@ class DiscardAndSave extends StatelessWidget {
               bool discardConfirmed = await showDiscardDialog(context);
               if (discardConfirmed) {
                 userAssetsController.discardChanges();
-                Get.toNamed('/dashboard');
+                Get.offAllNamed('/dashboard');
               }
             })),
         Obx(() => PrimaryButton(
@@ -54,7 +54,7 @@ class DiscardAndSave extends StatelessWidget {
                 loadingAnimation();
                 await userAssetsController.saveAssets();
                 Get.find<ReportController>().calculateAll();
-                Get.toNamed('/dashboard');
+                Get.offAllNamed('/dashboard');
               }
             }))
       ]),

@@ -13,8 +13,6 @@ class NavigationController extends GetxController {
       case 1:
         Get.toNamed('/settings');
         break;
-      case 2:
-        break;
     }
   }
 }
