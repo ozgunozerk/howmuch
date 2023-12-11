@@ -114,7 +114,8 @@ class TransactionsController extends GetxController {
     snapshots.snapshotMap[nextSnapshotDateString]!.typeMap[type]![assetId] ??=
         Asset(
       amount: 0,
-      price: _priceTablesController.getPriceForAsset(type, assetId)!,
+      price: _priceTablesController.getPriceForAsset(type, assetId,
+          priceTableDate: nextSnapshotDateString)!,
       category: type.name,
     );
   }
