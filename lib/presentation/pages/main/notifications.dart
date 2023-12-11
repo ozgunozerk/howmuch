@@ -19,8 +19,7 @@ class NotificationsPage extends GetView<LoginController> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            navigationController.selectedIndex.value = 0;
-            Get.toNamed('/dashboard');
+            navigationController.onItemTapped(0);
           },
         ),
         title: const Text("Notifications"),

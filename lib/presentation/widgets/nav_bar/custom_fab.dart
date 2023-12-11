@@ -18,7 +18,7 @@ class CustomFAB extends StatelessWidget {
         color: howBlack,
       ),
       onPressed: () {
-        Get.toNamed('edit_assets');
+        Get.toNamed('/edit_assets');
       },
     );
   }

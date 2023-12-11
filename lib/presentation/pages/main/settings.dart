@@ -18,8 +18,7 @@ class SettingsPage extends GetView<LoginController> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            navigationController.selectedIndex.value = 0;
-            Get.toNamed('/dashboard');
+            navigationController.onItemTapped(0);
           },
         ),
         title: const Text("Settings"),
@@ -37,13 +36,13 @@ class SettingsPage extends GetView<LoginController> {
                 return ListTile(
                   leading: const Icon(Ionicons.information_circle_outline),
                   title: const Text("About"),
-                  onTap: () => Get.toNamed('about'),
+                  onTap: () => Get.toNamed('/about'),
                 );
               } else if (index == 1) {
                 return ListTile(
                   leading: const Icon(Ionicons.help_circle_outline),
                   title: const Text("FAQ"),
-                  onTap: () => Get.toNamed('faq'),
+                  onTap: () => Get.toNamed('/faq'),
                 );
               } else {
                 return ListTile(

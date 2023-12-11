@@ -38,7 +38,7 @@ class SnapshotsController extends GetxController {
     if (!foundSnapshots) {
       // couldn't find any local snapshot, fetch transactions from the server
       TransactionsController transactionsController =
-          Get.put(TransactionsController());
+          Get.put(TransactionsController(), permanent: true);
 
       // if there are no transactions, it means we are dealing with a new user
       bool wereThereAnyTransactions =
