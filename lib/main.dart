@@ -11,6 +11,11 @@ import 'package:how_much/presentation/ui/colours.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light) // Or Brightness.dark
+      );
+
   // disables horizontal mode
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
