@@ -211,7 +211,7 @@ class SnapshotsController extends GetxController {
     }
 
     DateTime utc = parseDateWithHour(snapshotDate);
-    DateTime local = utc.toLocal();
+    DateTime local = utc.add(utc.timeZoneOffset);
 
     String formattedLastDate = formatDateWithHour(local);
 
