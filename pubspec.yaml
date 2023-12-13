@@ -53,6 +53,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   flutter_native_splash: ^2.3.5
   url_launcher: ^6.2.1
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:

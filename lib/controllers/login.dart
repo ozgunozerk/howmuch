@@ -68,6 +68,18 @@ class LoginController extends GetxController {
     return true;
   }
 
+  Future<bool> appleLogin() async {
+    try {
+      final appleProvider = AppleAuthProvider();
+      _firebaseUser =
+          (await FirebaseAuth.instance.signInWithProvider(appleProvider)).user;
+      update();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<void> afterLogin() async {
     // initialize these controllers after successful login immediately
 
