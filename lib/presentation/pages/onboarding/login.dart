@@ -43,6 +43,26 @@ class LoginPage extends GetView<LoginController> {
                   icon: const Icon(Ionicons.logo_google),
                   label: const Text("Sign up with Google"),
                 ),
+                const Padding(padding: EdgeInsets.all(16)),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    bool loginSuccessful = await controller.appleLogin();
+                    if (loginSuccessful) {
+                      // Push a new page with only loading animation
+                      loadingAnimation();
+                      (await SharedPreferences.getInstance())
+                          .setBool('isLoggedIn', true); // Save the login status
+                      await controller
+                          .afterLogin(); // `afterLogin` will transition into a new page after it's completed
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      foregroundColor: howBlack,
+                      backgroundColor: howWhite,
+                      minimumSize: const Size(double.infinity, 50)),
+                  icon: const Icon(Ionicons.logo_apple),
+                  label: const Text("Sign up with Apple"),
+                ),
               ],
             ),
           ),
