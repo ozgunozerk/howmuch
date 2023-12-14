@@ -34,7 +34,7 @@ class DiscardAndSave extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Obx(() => SecondaryButton(
             cta: "Discard",
-            enabled: userAssetsController.isThereTransactions(),
+            enabled: userAssetsController.isThereAnyTransaction(),
             small: true,
             onTap: () async {
               bool discardConfirmed = await showDiscardDialog(context);
@@ -44,18 +44,23 @@ class DiscardAndSave extends StatelessWidget {
               }
             })),
         Obx(() => PrimaryButton(
-            cta: "Save All",
-            enabled: userAssetsController.isThereTransactions(),
+            cta: "Done",
+            enabled: userAssetsController.isThereAnyAsset(),
             small: true,
             onTap: () async {
-              bool saveConfirmation =
-                  await _showSaveDialog(context, userAssetsController);
-              if (saveConfirmation) {
-                loadingAnimation();
-                await userAssetsController.saveAssets();
-                Get.find<ReportController>().calculateAll();
-                Get.offAllNamed('/dashboard');
+              if (userAssetsController.isThereAnyTransaction()) {
+                bool saveConfirmation =
+                    await _showSaveDialog(context, userAssetsController);
+                if (!saveConfirmation) {
+                  // don't do anything if there are transactions and user does not confirm to proceed
+                  return;
+                }
               }
+              // for every other scenario:
+              loadingAnimation();
+              await userAssetsController.saveAssets();
+              Get.find<ReportController>().calculateAll();
+              Get.offAllNamed('/dashboard');
             }))
       ]),
     );
@@ -68,7 +73,7 @@ Future<bool> showDiscardDialog(BuildContext context) {
     builder: (context) => AlertDialog(
       title: const Text("Confirm Discard"),
       content: const Text(
-          "If you have made changes, this will discard them all. Are you sure you want to continue?"),
+          "This will discard any amount changes you have made (category changes are applied immediately). Are you sure you want to continue?"),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
