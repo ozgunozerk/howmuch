@@ -38,8 +38,6 @@ Widget about() {
       const Text(
         "an open-source portfolio aggregator and report generator.\n"
         "\n"
-        "HowMuch is currently in the beta phase, so there might be a few minor bugs lurking around. 🐞\n"
-        "\n"
         "Please note that price updates occur every 6 hours.\n"
         "\n"
         "If you have any feedback, feature requests, or bug reports, or if you wish to contribute, please visit the ",
