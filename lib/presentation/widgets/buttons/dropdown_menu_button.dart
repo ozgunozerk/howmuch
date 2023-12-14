@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-import 'package:how_much/presentation/ui/colours.dart';
-import 'package:how_much/presentation/ui/text_styles.dart';
-
 class DropdownMenuButton<CustomType> extends StatelessWidget {
   final List<CustomType> valueList;
   final String text;
-  final Offset? offset;
+  final TextStyle textStyle;
   final ValueChanged<CustomType> onSelect;
 
   const DropdownMenuButton({
@@ -15,14 +12,13 @@ class DropdownMenuButton<CustomType> extends StatelessWidget {
     required this.valueList,
     required this.onSelect,
     required this.text,
-    this.offset,
+    required this.textStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
         position: PopupMenuPosition.under,
-        offset: offset ?? const Offset(0, 0),
         onSelected: (CustomType newValue) {
           onSelect(newValue);
         },
@@ -31,10 +27,10 @@ class DropdownMenuButton<CustomType> extends StatelessWidget {
                   value: listElement, child: Text(listElement.toString()));
             }).toList(),
         child: Row(children: [
-          Text(text, style: categoryHeaderTextStyle),
-          const Icon(
+          Text(text, style: textStyle),
+          Icon(
             Ionicons.chevron_down_outline,
-            color: howWhite,
+            color: textStyle.color,
             size: 16,
           ),
         ]));

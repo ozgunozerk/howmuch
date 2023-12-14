@@ -56,6 +56,7 @@ class CategoryCard extends StatelessWidget {
                           onSelect: (newValue) async {
                             currencyController.selectedCurrency = newValue;
                           },
+                          textStyle: categoryHeaderTextStyle,
                         )),
                   ],
                 ),
