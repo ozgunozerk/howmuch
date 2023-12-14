@@ -163,39 +163,40 @@ class UserAssetsController extends GetxController {
     return _userAssets.value.checkIfAssetExists(assetType, assetId);
   }
 
-  bool isThereTransactions() {
-    return _transactions.value.transactions.isNotEmpty;
-  }
+  bool isThereAnyAsset() => _userAssets.value.assets.typeMap.isNotEmpty;
+
+  bool isThereAnyTransaction() => _transactions.value.transactions.isNotEmpty;
 
   Future<void> saveAssets() async {
-    final HttpsCallable callable =
-        _firebaseService.functions.httpsCallable('addTransactions');
+    if (_transactions.value.transactions.isNotEmpty) {
+      final HttpsCallable callable =
+          _firebaseService.functions.httpsCallable('addTransactions');
 
-    try {
-      await callable.call(_transactions.value.toMap());
-    } catch (e) {
-      showErrorDialog(
-          "There was a problem communicating with the server. Please try again later.");
+      try {
+        await callable.call(_transactions.value.toMap());
+      } catch (e) {
+        showErrorDialog(
+            "There was a problem communicating with the server. Please try again later.");
 
-      return;
+        return;
+      }
+
+      // Update snapshots controller
+      String nextSnapshotDateUtc = getNextUpdateTime();
+      LinkedHashMap<String, Assets> snapshotsMap =
+          _snapshotsController.snapshots.snapshotMap;
+      if (snapshotsMap.containsKey(nextSnapshotDateUtc)) {
+        snapshotsMap[nextSnapshotDateUtc] = _userAssets.value.assets.clone();
+      } else {
+        snapshotsMap[nextSnapshotDateUtc] = _userAssets.value.assets.clone();
+        _snapshotsController.setLastSnapshotDate();
+        await _snapshotsController.storeSnapshotsOnDevice();
+      }
     }
 
     _userAssets.value.pruneEmptyCategoriesOnSave();
-
-    // Update cache
+    // Update local storage
     await _saveUserAssetsToDevice(_userAssets.value);
-
-    // Update snapshots controller
-    String nextSnapshotDateUtc = getNextUpdateTime();
-    LinkedHashMap<String, Assets> snapshotsMap =
-        _snapshotsController.snapshots.snapshotMap;
-    if (snapshotsMap.containsKey(nextSnapshotDateUtc)) {
-      snapshotsMap[nextSnapshotDateUtc] = _userAssets.value.assets.clone();
-    } else {
-      snapshotsMap[nextSnapshotDateUtc] = _userAssets.value.assets.clone();
-      _snapshotsController.setLastSnapshotDate();
-      await _snapshotsController.storeSnapshotsOnDevice();
-    }
   }
 
   discardChanges() {
