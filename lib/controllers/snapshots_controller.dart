@@ -231,7 +231,7 @@ class SnapshotsController extends GetxController {
       assetMap.forEach((assetId, asset) {
         double price = _priceTablesController.getPriceForAsset(
             assetType, assetId,
-            priceTableDate: priceTableDateUtc)!;
+            priceTableDateString: priceTableDateUtc)!;
         assets.typeMap[assetType]![assetId]!.price = price;
       });
     });

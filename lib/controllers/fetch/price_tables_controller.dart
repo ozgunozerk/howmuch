@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:how_much/custom_types.dart';
 import 'package:how_much/util/firebase_init.dart';
 import 'package:how_much/util/helper_funcs.dart';
+import 'package:how_much/util/parsing.dart';
 
 class PriceTablesController extends GetxController with WidgetsBindingObserver {
   final _firebaseService = FirebaseService();
@@ -90,13 +91,25 @@ class PriceTablesController extends GetxController with WidgetsBindingObserver {
   /// if provided, queries the given price table
   /// if not, queries the current (the newest) price table
   double? getPriceForAsset(AssetType assetType, String assetId,
-      {String priceTableDate = ""}) {
-    if (priceTableDate == "") {
+      {String priceTableDateString = ""}) {
+    if (priceTableDateString == "") {
       return priceTables
           .priceTableMap.values.last.data[assetType]?.entries[assetId];
     } else {
-      return priceTables
-          .priceTableMap[priceTableDate]!.data[assetType]?.entries[assetId];
+      DateTime priceTableDateUTC = parseDateWithHour(priceTableDateString);
+      DateTime now = DateTime.now();
+      DateTime nowUTC = now.subtract(now.timeZoneOffset);
+      if (priceTableDateUTC.difference(nowUTC).inHours > 0) {
+        // last price table date is later than `now`, means we are dealing
+        // with a non-finalized snapshot, and this price table does not exist yet
+        // use the previous price table for now
+        // this can only happen when we are processing a non-finalized transaction
+        priceTableDateString = formatDateWithHour(
+            priceTableDateUTC.subtract(const Duration(hours: 6)));
+      }
+
+      return priceTables.priceTableMap[priceTableDateString]!.data[assetType]
+          ?.entries[assetId];
     }
   }
 }

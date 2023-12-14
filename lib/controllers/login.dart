@@ -144,5 +144,12 @@ class LoginController extends GetxController {
     FirebaseAuth.instance.signOut();
   }
 
-  String get displayName => _firebaseUser!.displayName!;
+  String get displayName {
+    try {
+      return " ${_firebaseUser!.displayName!}";
+    } catch (_) {
+      // cannot fetch display name if the auth provider is apple
+      return "";
+    }
+  }
 }
