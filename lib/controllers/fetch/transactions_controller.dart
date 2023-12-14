@@ -62,8 +62,13 @@ class TransactionsController extends GetxController {
 
     await _fetchPriceTablesWithDate(sortedKeys.first);
 
-    // dummy value that does not affect the computation (null would require additional checks)
-    DateTime lastCreatedSnapshotDate = DateTime.now();
+    // we use this value to compare how many snapshots were in between current
+    // and last transaction. Since the current transaction may not be finalized
+    // we need to add at least 6 hours to `now` to ensure this check will work
+    // correctly for the first time. We could have made this null, but then
+    // we would need additional null checks for every iteration.
+    DateTime lastCreatedSnapshotDate =
+        DateTime.now().add(const Duration(days: 1));
 
     sortedTransactions.forEach((date, transactionData) {
       // Extract transaction details
@@ -115,7 +120,7 @@ class TransactionsController extends GetxController {
         Asset(
       amount: 0,
       price: _priceTablesController.getPriceForAsset(type, assetId,
-          priceTableDate: nextSnapshotDateString)!,
+          priceTableDateString: nextSnapshotDateString)!,
       category: type.name,
     );
   }
@@ -147,8 +152,10 @@ class TransactionsController extends GetxController {
     // so we should use the previous snapshot date, in order to fetch the correct price tables
 
     // find the previous update time for that timestamp with rounding down
-    String previousUpdateTime =
-        getPreviousUpdateTime(DateTime.parse(timestamp));
+    // we subtract 6 for the case the transaction may not be finalized,
+    // if so, we will need the previous price table
+    String previousUpdateTime = getPreviousUpdateTime(
+        DateTime.parse(timestamp).subtract(const Duration(hours: 6)));
 
     await _priceTablesController.fetchPriceTables(previousUpdateTime);
   }

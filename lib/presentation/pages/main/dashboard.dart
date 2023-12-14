@@ -21,7 +21,7 @@ class DashboardPage extends StatelessWidget {
   DashboardPage({super.key});
 
   final dateController = Get.find<DateController>();
-  final googleController = Get.find<LoginController>();
+  final loginController = Get.find<LoginController>();
   final reportController = Get.find<ReportController>();
   final navigationController = Get.find<NavigationController>();
 
@@ -41,7 +41,7 @@ class DashboardPage extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                        "👋 Welcome ${googleController.displayName.split(" ")[0]}!",
+                        "👋 Welcome${loginController.displayName.split(" ")[0]}!",
                         style: welcomeTextStyle),
                     const Spacer(),
                     CircleAvatar(
