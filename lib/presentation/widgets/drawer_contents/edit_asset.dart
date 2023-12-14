@@ -6,6 +6,7 @@ import 'package:how_much/controllers/user_assets_controller.dart';
 import 'package:how_much/custom_types.dart';
 import 'package:how_much/presentation/ui/colours.dart';
 import 'package:how_much/presentation/ui/text_styles.dart';
+import 'package:how_much/presentation/widgets/buttons/dropdown_menu_button.dart';
 import 'package:how_much/presentation/widgets/buttons/primary_secondary.dart';
 import 'package:how_much/util/symbol_to_icon.dart';
 
@@ -15,18 +16,20 @@ class AssetEdit extends StatelessWidget {
   final Category category;
   final double currentAmount;
 
-  const AssetEdit(
-      {super.key,
-      required this.assetType,
-      required this.assetId,
-      required this.category,
-      required this.currentAmount});
+  const AssetEdit({
+    super.key,
+    required this.assetType,
+    required this.assetId,
+    required this.category,
+    required this.currentAmount,
+  });
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController textEditingController = TextEditingController();
     final UserAssetsController userAssetsController =
         Get.find<UserAssetsController>();
+    Category currentCategory = category;
 
     return Center(
       child: Column(
@@ -49,37 +52,24 @@ class AssetEdit extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Padding(padding: EdgeInsets.all(32)),
+                  Text("Current Amount: ${currentAmount.toString()}",
+                      style: transactionInfoTextStyle),
                   const Padding(padding: EdgeInsets.all(24)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(padding: EdgeInsets.all(8)),
-                      Text("Current Amount: ${currentAmount.toString()}",
-                          style: transactionInfoTextStyle),
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.all(16)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(padding: EdgeInsets.all(8)),
-                      const Text("New Amount",
-                          style: transactionInfoHeaderStyle),
-                      const Padding(padding: EdgeInsets.all(2)),
-                      TextField(
-                        controller: textEditingController,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.zero,
-                          isDense: true,
-                          hintText: "Enter the new amount",
-                          hintStyle: transactionInfoHintStyle,
-                          border: InputBorder.none,
-                        ),
-                        style: transactionInfoTextStyle,
-                      ),
-                    ],
+                  const Text("New Amount", style: transactionInfoHeaderStyle),
+                  const Padding(padding: EdgeInsets.all(2)),
+                  TextField(
+                    controller: textEditingController,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      isDense: true,
+                      hintText: "Enter the new amount",
+                      hintStyle: transactionInfoHintStyle,
+                      border: InputBorder.none,
+                    ),
+                    style: transactionInfoTextStyle,
                   ),
                   Container(
                     height: 0.5,
@@ -88,62 +78,77 @@ class AssetEdit extends StatelessWidget {
                         color: howLightGrey,
                         borderRadius: BorderRadius.circular(10.0)),
                   ),
+                  const Padding(padding: EdgeInsets.all(32)),
+                  Row(
+                    children: [
+                      const Text(
+                        "Category: ",
+                        style: transactionInfoSecondaryTextStyle,
+                      ),
+                      DropdownMenuButton(
+                        valueList: userAssetsController.categorySet.toList(),
+                        onSelect: (newCategory) {
+                          userAssetsController.changeAssetCategory(
+                              assetId, assetType, currentCategory, newCategory);
+                          currentCategory = newCategory;
+                        },
+                        text: category,
+                        textStyle: transactionInfoSecondaryTextStyle,
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
           ),
-          const Padding(padding: EdgeInsets.all(16)),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(48.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SecondaryButton(
-                    cta: "Delete",
+          const Padding(padding: EdgeInsets.all(32)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SecondaryButton(
+                cta: "Delete",
+                small: true,
+                enabled: true,
+                onTap: () async {
+                  bool deleteConfirmation =
+                      await _showDeleteDialog(context, userAssetsController);
+                  if (deleteConfirmation) {
+                    userAssetsController.deleteAsset(
+                      category,
+                      assetType,
+                      assetId,
+                    );
+                    Get.back();
+                  }
+                },
+              ),
+              const Padding(padding: EdgeInsets.all(12)),
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: textEditingController,
+                builder: (BuildContext context, TextEditingValue value,
+                    Widget? child) {
+                  return PrimaryButton(
+                    cta: "Done",
                     small: true,
-                    enabled: true,
-                    onTap: () async {
-                      bool deleteConfirmation = await _showDeleteDialog(
-                          context, userAssetsController);
-                      if (deleteConfirmation) {
-                        userAssetsController.deleteAsset(
+                    onTap: () {
+                      if (value.text.isNotEmpty) {
+                        userAssetsController.updateAssetAmount(
                           category,
                           assetType,
                           assetId,
+                          (double.tryParse(textEditingController.text
+                                      .replaceAll(",", ".")) ??
+                                  0.0) -
+                              currentAmount,
                         );
-                        Get.back();
                       }
+                      Navigator.pop(context);
                     },
-                  ),
-                  const Spacer(),
-                  ValueListenableBuilder<TextEditingValue>(
-                    valueListenable: textEditingController,
-                    builder: (BuildContext context, TextEditingValue value,
-                        Widget? child) {
-                      return PrimaryButton(
-                        cta: "Done",
-                        small: true,
-                        onTap: () {
-                          userAssetsController.updateAssetAmount(
-                            category,
-                            assetType,
-                            assetId,
-                            (double.tryParse(textEditingController.text
-                                        .replaceAll(",", ".")) ??
-                                    0.0) -
-                                currentAmount,
-                          );
-                          Navigator.pop(context);
-                        },
-                        enabled: value.text.isNotEmpty,
-                      );
-                    },
-                  ),
-                ],
+                    enabled: true,
+                  );
+                },
               ),
-            ),
+            ],
           ),
         ],
       ),
