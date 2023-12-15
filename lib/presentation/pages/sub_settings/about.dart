@@ -10,17 +10,19 @@ class AboutPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('About'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            about(),
-            const Spacer(),
-            disclaimer(),
-            const Padding(padding: EdgeInsets.all(24))
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              about(),
+              const Padding(padding: EdgeInsets.all(32)),
+              disclaimer(),
+              const Padding(padding: EdgeInsets.all(24))
+            ],
+          ),
         ),
       ),
     );

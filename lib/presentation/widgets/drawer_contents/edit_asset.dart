@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:how_much/controllers/edit_assets/edit_asset.dart';
 
 import 'package:how_much/controllers/user_assets_controller.dart';
 import 'package:how_much/custom_types.dart';
@@ -26,10 +27,11 @@ class AssetEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController textEditingController = TextEditingController();
     final UserAssetsController userAssetsController =
         Get.find<UserAssetsController>();
-    Category currentCategory = category;
+    final EditAssetController editAssetController =
+        Get.find<EditAssetController>();
+    editAssetController.selectedCategory = category;
 
     return Center(
       child: Column(
@@ -59,7 +61,7 @@ class AssetEdit extends StatelessWidget {
                   const Text("New Amount", style: transactionInfoHeaderStyle),
                   const Padding(padding: EdgeInsets.all(2)),
                   TextField(
-                    controller: textEditingController,
+                    controller: editAssetController.amountTextController,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: const InputDecoration(
@@ -85,16 +87,16 @@ class AssetEdit extends StatelessWidget {
                         "Category: ",
                         style: transactionInfoSecondaryTextStyle,
                       ),
-                      DropdownMenuButton(
-                        valueList: userAssetsController.categorySet.toList(),
-                        onSelect: (newCategory) {
-                          userAssetsController.changeAssetCategory(
-                              assetId, assetType, currentCategory, newCategory);
-                          currentCategory = newCategory;
-                        },
-                        text: category,
-                        textStyle: transactionInfoSecondaryTextStyle,
-                      ),
+                      Obx(() => DropdownMenuButton(
+                            valueList:
+                                userAssetsController.categorySet.toList(),
+                            onSelect: (newCategory) {
+                              editAssetController.selectedCategory =
+                                  newCategory;
+                            },
+                            text: editAssetController.selectedCategory,
+                            textStyle: transactionInfoSecondaryTextStyle,
+                          )),
                     ],
                   )
                 ],
@@ -123,30 +125,25 @@ class AssetEdit extends StatelessWidget {
                 },
               ),
               const Padding(padding: EdgeInsets.all(12)),
-              ValueListenableBuilder<TextEditingValue>(
-                valueListenable: textEditingController,
-                builder: (BuildContext context, TextEditingValue value,
-                    Widget? child) {
-                  return PrimaryButton(
-                    cta: "Done",
-                    small: true,
-                    onTap: () {
-                      if (value.text.isNotEmpty) {
-                        userAssetsController.updateAssetAmount(
-                          category,
-                          assetType,
-                          assetId,
-                          (double.tryParse(textEditingController.text
-                                      .replaceAll(",", ".")) ??
-                                  0.0) -
-                              currentAmount,
-                        );
-                      }
-                      Navigator.pop(context);
-                    },
-                    enabled: true,
-                  );
+              PrimaryButton(
+                cta: "Done",
+                small: true,
+                onTap: () {
+                  {
+                    double newAmount = editAssetController.amount.value;
+                    if (newAmount != 0) {
+                      userAssetsController.updateAssetAmount(category,
+                          assetType, assetId, newAmount - currentAmount);
+                    }
+                    String newCategory = editAssetController.selectedCategory;
+                    if (category != newCategory) {
+                      userAssetsController.changeAssetCategory(
+                          assetId, assetType, category, newCategory);
+                    }
+                  }
+                  Navigator.pop(context);
                 },
+                enabled: true,
               ),
             ],
           ),

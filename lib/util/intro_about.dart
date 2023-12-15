@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:how_much/presentation/ui/colours.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Widget disclaimer() {
-  return const Text(
-    "Disclaimer: our service DOES NOT provide any financial services. "
-    "All data contained in this website|application and via API is "
-    "not necessarily real-time nor accurate. All CFDs (stocks, "
-    "indices, mutual funds, ETFs), and Forex are not provided by "
-    "exchanges but rather by market makers, and so prices may not "
-    "be accurate and may differ from the actual market price, "
-    "meaning prices are indicative and not appropriate for trading "
-    "purposes. We are not using exchanges data feeds for commercial "
-    "data, we are using OTC, peer to peer trades and trading "
-    "platforms over 100+ sources, we are aggregating our data "
-    "feeds via VWAP method.",
-    style: TextStyle(fontSize: 14),
+  return RichText(
+    text: const TextSpan(
+      style: TextStyle(fontSize: 14, color: howBlack),
+      children: [
+        TextSpan(
+          text: "Disclaimer:",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        TextSpan(
+          text: " our service DOES NOT provide any financial services. "
+              "All data contained in this website|application and via API is "
+              "not necessarily real-time nor accurate. All CFDs (stocks, "
+              "indices, mutual funds, ETFs), and Forex are not provided by "
+              "exchanges but rather by market makers, and so prices may not "
+              "be accurate and may differ from the actual market price, "
+              "meaning prices are indicative and not appropriate for trading "
+              "purposes. We are not using exchanges data feeds for commercial "
+              "data, we are using OTC, peer to peer trades and trading "
+              "platforms over 100+ sources, we are aggregating our data "
+              "feeds via VWAP method.",
+        ),
+      ],
+    ),
   );
 }
 

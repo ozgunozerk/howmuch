@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:how_much/controllers/auth.dart';
 import 'package:how_much/presentation/ui/colours.dart';
+import 'package:how_much/presentation/ui/text_styles.dart';
 
 class LoadingPage extends GetView<LoginController> {
   const LoadingPage({super.key});
@@ -19,9 +20,20 @@ class LoadingPage extends GetView<LoginController> {
       // if user is recognized -> dashboard page
       // if user is not recognized -> login page
       body: Center(
-        child: LoadingAnimationWidget.threeArchedCircle(
-          color: primary,
-          size: 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LoadingAnimationWidget.threeArchedCircle(
+              color: primary,
+              size: 200,
+            ),
+            const Padding(padding: EdgeInsets.all(24)),
+            const Text(
+              "This should only take a few seconds!",
+              style: transactionInfoTextStyle,
+            )
+          ],
         ),
       ),
     );
