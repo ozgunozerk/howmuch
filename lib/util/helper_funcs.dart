@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tuple/tuple.dart';
 
 import 'package:how_much/controllers/fetch/asset_table_controller.dart';
 import 'package:how_much/controllers/user_assets_controller.dart';
@@ -9,6 +10,7 @@ import 'package:how_much/presentation/ui/colours.dart';
 import 'package:how_much/presentation/ui/text_styles.dart';
 import 'package:how_much/presentation/widgets/dialogs/inner_bottom.dart';
 import 'package:how_much/util/parsing.dart';
+import 'package:how_much/custom_types.dart';
 
 void bottomSheetModalInvoker(BuildContext context, Widget content,
     double heightFactor, bool cancellable) {
@@ -105,9 +107,20 @@ loadingAnimation() {
   Get.to(
     () => Scaffold(
       body: Center(
-        child: LoadingAnimationWidget.threeArchedCircle(
-          color: primary,
-          size: 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LoadingAnimationWidget.threeArchedCircle(
+              color: primary,
+              size: 200,
+            ),
+            const Padding(padding: EdgeInsets.all(24)),
+            const Text(
+              "This should only take a few seconds!",
+              style: transactionInfoTextStyle,
+            )
+          ],
         ),
       ),
     ),
@@ -151,4 +164,18 @@ String getNextUpdateTime() {
   String nextSnapshotDateString = formatDateWithHour(roundedUpDate);
 
   return nextSnapshotDateString;
+}
+
+// Function to create a deep copy of Set<AssetUid>
+Set<AssetUid> _copyAssetUidSet(Set<AssetUid> originalSet) {
+  return originalSet
+      .map((assetUid) => Tuple2(assetUid.item1, assetUid.item2))
+      .toSet();
+}
+
+// Function to create a deep copy of CategoryMap
+CategoryMap cloneCategoryMap(CategoryMap originalMap) {
+  return originalMap.map((category, assetUidSet) {
+    return MapEntry(category, _copyAssetUidSet(assetUidSet));
+  });
 }

@@ -140,17 +140,11 @@ class AddNewAssetController extends GetxController {
     _selectedAssetName.value = "";
     _selectedAssetId.value = "";
     _selectedAssetSymbol.value = "";
-    _selectedCategory.value = "crypto";
-    _selectedType.value = AssetType.crypto;
+    // don't reset selected category and type
 
     amount.value = 0.0;
     price.value = 0.0;
     amountTextController.text = "";
-    categoryTextController.text = "crypto";
-
-    // reset the assets list for crypto
-    _assetsPerType.value =
-        assetTableController.getAssetsPerType(AssetType.crypto);
   }
 
   @override

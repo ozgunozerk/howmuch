@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:how_much/presentation/ui/colours.dart';
+import 'package:how_much/util/helper_funcs.dart';
 import 'package:ionicons/ionicons.dart';
 
 import 'package:how_much/controllers/auth.dart';
@@ -116,6 +117,10 @@ class SettingsPage extends GetView<LoginController> {
             TextButton(
                 onPressed: () async {
                   await controller.deleteAccount();
+                  Get.snackbar(
+                    "Success",
+                    "Your account has been successfully deleted. You will be redirected to login page.",
+                  );
                   Get.deleteAll(force: true);
                   Get.put(LoginController(), permanent: true);
                   Get.offAllNamed('/login');

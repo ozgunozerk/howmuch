@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:how_much/controllers/add/new_category.dart';
+import 'package:how_much/controllers/edit_assets/new_category.dart';
 import 'package:how_much/controllers/user_assets_controller.dart';
 import 'package:how_much/presentation/ui/colours.dart';
 import 'package:how_much/presentation/ui/text_styles.dart';

@@ -19,8 +19,9 @@ class UserAssetsController extends GetxController {
   final _firebaseService = FirebaseService();
 
   final _userAssets = UserAssets.empty().obs;
-
   final _transactions = Transactions.empty().obs;
+  CategoryMap _oldCategories = {};
+  final _isThereAnyCategoryChange = false.obs;
 
   final _categoryNameValid = false.obs;
 
@@ -44,6 +45,7 @@ class UserAssetsController extends GetxController {
     if (maybeCachedUserAssets != null) {
       // if we can find a cached `UserAssets` instance, use it
       _userAssets.value = maybeCachedUserAssets;
+      _oldCategories = cloneCategoryMap(_userAssets.value.categoryMap);
     } else if (maybeLastSnapshot != null) {
       // it could be that user has transactions in the server, but this device is new,
       // in that case, set the user assets to the content of the last snapshot
@@ -63,6 +65,7 @@ class UserAssetsController extends GetxController {
 
       // set the user assets
       _userAssets.value = UserAssets(assets: assets, categoryMap: categoryMap);
+      _oldCategories = cloneCategoryMap(_userAssets.value.categoryMap);
     } else {
       // means we are facing with a new user, don't do anything
     }
@@ -93,18 +96,21 @@ class UserAssetsController extends GetxController {
       userAssets!
           .changeAssetCategory(oldCategory, assetId, assetType, newCategory);
     });
+    _isThereAnyCategoryChange.value = true;
   }
 
   addCategory(Category category) {
     _userAssets.update((userAssets) {
       userAssets!.addNewCategory(category.toLowerCase());
     });
+    _isThereAnyCategoryChange.value = true;
   }
 
   updateCategoryName(Category oldCategory, Category newCategory) {
     _userAssets.update((userAssets) {
       userAssets!.updateCategoryName(oldCategory, newCategory.toLowerCase());
     });
+    _isThereAnyCategoryChange.value = true;
   }
 
   addNewAsset(AssetType assetType, String assetId, double amount, double price,
@@ -165,19 +171,20 @@ class UserAssetsController extends GetxController {
 
   bool isThereAnyAsset() => _userAssets.value.assets.typeMap.isNotEmpty;
 
-  bool isThereAnyTransaction() => _transactions.value.transactions.isNotEmpty;
+  bool _isThereAnyTransaction() => _transactions.value.transactions.isNotEmpty;
+
+  bool isThereAnyChange() =>
+      _isThereAnyTransaction() || _isThereAnyCategoryChange.value;
 
   Future<void> saveAssets() async {
-    if (_transactions.value.transactions.isNotEmpty) {
+    if (_isThereAnyTransaction()) {
       final HttpsCallable callable =
           _firebaseService.functions.httpsCallable('addTransactions');
-
       try {
         await callable.call(_transactions.value.toMap());
       } catch (e) {
         showErrorDialog(
             "There was a problem communicating with the server. Please try again later.");
-
         return;
       }
 
@@ -194,12 +201,17 @@ class UserAssetsController extends GetxController {
       }
     }
 
-    _userAssets.value.pruneEmptyCategoriesOnSave();
-    // Update local storage
-    await _saveUserAssetsToDevice(_userAssets.value);
+    if (isThereAnyChange()) {
+      _userAssets.value.pruneEmptyCategoriesOnSave();
+      _oldCategories = cloneCategoryMap(_userAssets.value.categoryMap);
+      _isThereAnyCategoryChange.value = false;
+      await _saveUserAssetsToDevice(_userAssets.value);
+    }
   }
 
   discardChanges() {
+    _userAssets.value.categoryMap = cloneCategoryMap(_oldCategories);
+    _isThereAnyCategoryChange.value = false;
     _userAssets.value.assets = _snapshotsController.getLastSnapshot()!.clone();
   }
 
