@@ -22,8 +22,8 @@ class LoginPage extends GetView<LoginController> {
             children: <Widget>[
               const Padding(padding: EdgeInsets.all(48)),
               const SizedBox(
-                  width: 350,
-                  height: 350,
+                  width: 320,
+                  height: 320,
                   child:
                       Image(image: AssetImage('assets/HM_LOGO-TYPE_02.png'))),
               const Spacer(),
