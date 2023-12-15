@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import 'package:how_much/controllers/login.dart';
+import 'package:how_much/controllers/auth.dart';
 import 'package:how_much/presentation/ui/colours.dart';
 
 class LoadingPage extends GetView<LoginController> {

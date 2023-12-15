@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
 
-import 'package:how_much/controllers/login.dart';
+import 'package:how_much/controllers/auth.dart';
 
 class LoginBindings extends Bindings {
   @override
   void dependencies() {
-    // login controller should be permanent, due to login/logout mechanisms
     Get.put(LoginController(), permanent: true);
 
     // from UX perspective, user is more ok to wait during login
