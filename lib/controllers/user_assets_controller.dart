@@ -46,10 +46,6 @@ class UserAssetsController extends GetxController {
       // if we can find a cached `UserAssets` instance, use it
       _userAssets.value = maybeCachedUserAssets;
       _oldCategories = cloneCategoryMap(_userAssets.value.categoryMap);
-      print("old categories on init:");
-      _oldCategories.forEach((key, value) {
-        print("key: $key, value: $value");
-      });
     } else if (maybeLastSnapshot != null) {
       // it could be that user has transactions in the server, but this device is new,
       // in that case, set the user assets to the content of the last snapshot
@@ -70,10 +66,6 @@ class UserAssetsController extends GetxController {
       // set the user assets
       _userAssets.value = UserAssets(assets: assets, categoryMap: categoryMap);
       _oldCategories = cloneCategoryMap(_userAssets.value.categoryMap);
-      print("old categories on init:");
-      _oldCategories.forEach((key, value) {
-        print("key: $key, value: $value");
-      });
     } else {
       // means we are facing with a new user, don't do anything
     }
@@ -218,23 +210,7 @@ class UserAssetsController extends GetxController {
   }
 
   discardChanges() {
-    print("old categories on discard begin:");
-    _oldCategories.forEach((key, value) {
-      print("key: $key, value: $value");
-    });
-    print("current categories on discard begin:");
-    _userAssets.value.categoryMap.forEach((key, value) {
-      print("key: $key, value: $value");
-    });
     _userAssets.value.categoryMap = cloneCategoryMap(_oldCategories);
-    print("old categories on discard end:");
-    _oldCategories.forEach((key, value) {
-      print("key: $key, value: $value");
-    });
-    print("current categories on discard end:");
-    _userAssets.value.categoryMap.forEach((key, value) {
-      print("key: $key, value: $value");
-    });
     _isThereAnyCategoryChange.value = false;
     _userAssets.value.assets = _snapshotsController.getLastSnapshot()!.clone();
   }
