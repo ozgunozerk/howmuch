@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:how_much/controllers/login.dart';
+import 'package:how_much/controllers/auth.dart';
 import 'package:how_much/controllers/helpers/nav_bar.dart';
 import 'package:how_much/presentation/ui/text_styles.dart';
 import 'package:how_much/presentation/widgets/blinking_status.dart';

@@ -5,7 +5,7 @@ import 'package:ionicons/ionicons.dart';
 
 import 'package:how_much/controllers/helpers/date.dart';
 import 'package:how_much/controllers/helpers/nav_bar.dart';
-import 'package:how_much/controllers/login.dart';
+import 'package:how_much/controllers/auth.dart';
 import 'package:how_much/controllers/report_controller.dart';
 import 'package:how_much/presentation/ui/colours.dart';
 import 'package:how_much/presentation/ui/text_styles.dart';

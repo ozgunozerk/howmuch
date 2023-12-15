@@ -4,7 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:how_much/controllers/login.dart';
+import 'package:how_much/controllers/auth.dart';
 import 'package:how_much/presentation/ui/colours.dart';
 import 'package:how_much/util/helper_funcs.dart';
 

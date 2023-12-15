@@ -10,6 +10,7 @@ import 'package:how_much/controllers/snapshots_controller.dart';
 import 'package:how_much/controllers/user_assets_controller.dart';
 import 'package:how_much/controllers/helpers/currency.dart';
 import 'package:how_much/controllers/helpers/date.dart';
+import 'package:how_much/util/helper_funcs.dart';
 
 class LoginController extends GetxController {
   final googleSignIn = GoogleSignIn();
@@ -136,20 +137,57 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-
-    await googleSignIn.signOut();
-    FirebaseAuth.instance.signOut();
-  }
-
   String get displayName {
     try {
       return " ${_firebaseUser!.displayName!}";
     } catch (_) {
       // cannot fetch display name if the auth provider is apple
       return "";
+    }
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    if (_googleUser != null) {
+      await googleSignIn.signOut();
+    }
+
+    FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      await _firebaseUser!.delete();
+      await googleSignIn.signOut();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "requires-recent-login") {
+        await _reAuthAndDelete();
+        await googleSignIn.signOut();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+      }
+    } catch (e) {
+      showErrorDialog("Couldn't delete account: $e");
+    }
+  }
+
+  Future<void> _reAuthAndDelete() async {
+    try {
+      final providerData = _firebaseUser!.providerData.first;
+
+      if (AppleAuthProvider().providerId == providerData.providerId) {
+        await _firebaseUser!.reauthenticateWithProvider(AppleAuthProvider());
+      } else if (GoogleAuthProvider().providerId == providerData.providerId) {
+        await _firebaseUser!.reauthenticateWithProvider(GoogleAuthProvider());
+      }
+
+      await _firebaseUser!.delete();
+    } catch (e) {
+      showErrorDialog("An error occurred during re-authentication: $e");
     }
   }
 }
