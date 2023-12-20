@@ -44,8 +44,8 @@ dependencies:
   flutter_typeahead: ^4.3.1
   ionicons: ^0.2.2
   animated_bottom_navigation_bar: ^1.2.0
-  fl_chart: ^0.64.0
-  intl: ^0.18.1
+  fl_chart: ^0.65.0
+  intl: ^0.19.0
   tuple: ^2.0.1
   shared_preferences: ^2.1.1
   cryptofont: ^1.0.2+1
