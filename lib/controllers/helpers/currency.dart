@@ -40,9 +40,9 @@ class CurrencyController extends GetxController {
       case BaseCurrency.USD:
         return 1;
       case BaseCurrency.TRY:
-        return priceController.getPriceForAsset(AssetType.forex, "TRY")!;
+        return 1 / priceController.getPriceForAsset(AssetType.forex, "TRYUSD")!;
       case BaseCurrency.EUR:
-        return priceController.getPriceForAsset(AssetType.forex, "EUR")!;
+        return 1 / priceController.getPriceForAsset(AssetType.forex, "EURUSD")!;
       case BaseCurrency.BTC:
         return 1 /
             priceController.getPriceForAsset(AssetType.crypto, "bitcoin")!;
