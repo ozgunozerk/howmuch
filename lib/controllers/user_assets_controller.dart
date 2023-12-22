@@ -202,9 +202,14 @@ class UserAssetsController extends GetxController {
     }
 
     if (isThereAnyChange()) {
+      // applying category updates even when there are only transaction changes
+      // is not harmful, and `isThereAnyChange` check eliminates code duplication
+      // and extra checks for differentiating between category and transaction changes
+
       _userAssets.value.pruneEmptyCategoriesOnSave();
       _oldCategories = cloneCategoryMap(_userAssets.value.categoryMap);
       _isThereAnyCategoryChange.value = false;
+      _transactions.value = Transactions.empty();
       await _saveUserAssetsToDevice(_userAssets.value);
     }
   }
@@ -212,6 +217,7 @@ class UserAssetsController extends GetxController {
   discardChanges() {
     _userAssets.value.categoryMap = cloneCategoryMap(_oldCategories);
     _isThereAnyCategoryChange.value = false;
+    _transactions.value = Transactions.empty();
     _userAssets.value.assets = _snapshotsController.getLastSnapshot()!.clone();
   }
 
