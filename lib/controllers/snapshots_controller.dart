@@ -59,21 +59,10 @@ class SnapshotsController extends GetxController {
     // Cancel any existing timer
     _updateTimer?.cancel();
 
-    // Start a new timer that runs every 1 minutes
-    _updateTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
-      _handleTimerTick();
-    });
-  }
-
-  void _handleTimerTick() {
-    // Convert the current time to UTC
-    DateTime now = DateTime.now().toUtc();
-    DateTime nowUTC = now.subtract(now.timeZoneOffset);
-
-    // fetch updates every 6 hours
-    if (nowUTC.hour % 6 == 0) {
+    // Start a new timer that runs every 5 minutes
+    _updateTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
       _fetchServerSideUpdates(); // do not await, this should not be blocking
-    }
+    });
   }
 
   Future<bool> _loadSnapshotsFromDevice() async {
@@ -130,31 +119,36 @@ class SnapshotsController extends GetxController {
     int hourDiff = nowUTC.difference(lastSnapshotDateUTC).inHours;
 
     if (hourDiff >= 6) {
-      if (_priceTablesController.lastPriceTableDateUTC != previousUpdateTime) {
-        // price tables are not up to date, fetch the new ones
-        await _priceTablesController
-            .fetchPriceTables(_priceTablesController.lastPriceTableDateUTC);
-      }
-
-      // it could be that we don't have a finalized snapshot, although we have snapshots present
-      DateTime? lastFinalizedSnapshotDateUTC = _getFinalizedDate();
-
-      // finalize snapshots
-      snapshots
-          .getNonFinalizedSnapshotDates(lastFinalizedSnapshotDateUTC)
-          .forEach((dateString) async {
-        await finalizeSnapshot(dateString);
-      });
-
-      // even after finalizing snapshots, we could be missing some snapshots
-      await generateMissingSnapshots(nowUTC);
-
-      setLastSnapshotDate();
-      updateFinalizedDate();
-      await storeSnapshotsOnDevice();
+      await _updatePriceTablesAndSnapshots(previousUpdateTime, nowUTC);
     } else {
       // means there are no updates yet, don't do anything
     }
+  }
+
+  Future<void> _updatePriceTablesAndSnapshots(
+      String previousUpdateTime, DateTime nowUTC) async {
+    if (_priceTablesController.lastPriceTableDateUTC != previousUpdateTime) {
+      // price tables are not up to date, fetch the new ones
+      await _priceTablesController
+          .fetchPriceTables(_priceTablesController.lastPriceTableDateUTC);
+    }
+
+    // it could be that we don't have a finalized snapshot, although we have snapshots present
+    DateTime? lastFinalizedSnapshotDateUTC = _getFinalizedDate();
+
+    // finalize snapshots
+    snapshots
+        .getNonFinalizedSnapshotDates(lastFinalizedSnapshotDateUTC)
+        .forEach((dateString) async {
+      await _finalizeSnapshot(dateString);
+    });
+
+    // even after finalizing snapshots, we could be missing some snapshots
+    await generateMissingSnapshots(nowUTC);
+
+    setLastSnapshotDate();
+    _updateFinalizedDate();
+    await storeSnapshotsOnDevice();
   }
 
   void setFirstSnapshotDate() {
@@ -165,7 +159,7 @@ class SnapshotsController extends GetxController {
     _lastSnapshotDateUTC = snapshots.snapshotMap.keys.last;
   }
 
-  void updateFinalizedDate() {
+  void _updateFinalizedDate() {
     _lastFinalizedSnapshotDateUTC = _lastSnapshotDateUTC;
   }
 
@@ -226,7 +220,7 @@ class SnapshotsController extends GetxController {
     return null;
   }
 
-  updateAssetsWithPriceTable(Assets assets, String priceTableDateUtc) {
+  _updateAssetsWithPriceTable(Assets assets, String priceTableDateUtc) {
     assets.typeMap.forEach((assetType, assetMap) {
       assetMap.forEach((assetId, asset) {
         double price = _priceTablesController.getPriceForAsset(
@@ -237,11 +231,11 @@ class SnapshotsController extends GetxController {
     });
   }
 
-  Future<void> finalizeSnapshot(String snapshotDate) async {
+  Future<void> _finalizeSnapshot(String snapshotDate) async {
     Assets snapshotContent = snapshots.snapshotMap[snapshotDate]!;
     Assets assets = snapshotContent.clone();
 
-    updateAssetsWithPriceTable(assets, snapshotDate);
+    _updateAssetsWithPriceTable(assets, snapshotDate);
     snapshots.snapshotMap[snapshotDate] = assets;
   }
 
@@ -259,7 +253,7 @@ class SnapshotsController extends GetxController {
       DateTime newDate = lastSnapshotDateUTC.add(Duration(hours: 6 * counter));
       String newDateString = formatDateWithHour(newDate);
 
-      updateAssetsWithPriceTable(assets, newDateString);
+      _updateAssetsWithPriceTable(assets, newDateString);
       snapshots.snapshotMap[newDateString] = assets;
     }
   }
