@@ -181,9 +181,15 @@ class SnapshotsController extends GetxController {
     DateTime nowUTC = now.subtract(now.timeZoneOffset);
     if (lastSnapshotDateUTC.difference(nowUTC).inHours > 0) {
       // last snapshot is later than `now`, means it is NOT finalized
-      // find the previous snapshot's date by subtracting 6 hours
-      _lastFinalizedSnapshotDateUTC = formatDateWithHour(
-          lastSnapshotDateUTC.subtract(const Duration(hours: 6)));
+      DateTime firstSnapshotDateUTC = parseDateWithHour(_firstSnapshotDateUTC);
+      if (firstSnapshotDateUTC != lastSnapshotDateUTC) {
+        // means there is a previous snapshot
+        // find the 2nd last snapshot's date by subtracting 6 hours from the last one
+        _lastFinalizedSnapshotDateUTC = formatDateWithHour(
+            lastSnapshotDateUTC.subtract(const Duration(hours: 6)));
+      } else {
+        // means there is no previous snapshot, we shouldn't set the last finalized snapshot date
+      }
     } else {
       _lastFinalizedSnapshotDateUTC = _lastSnapshotDateUTC;
     }
