@@ -41,13 +41,7 @@ class StaticAssetList extends StatelessWidget {
   }
 }
 
-List<Widget> _buildAssetItems(
-  List<AssetItem> assetList,
-  BuildContext context,
-) {
-  // don't show sold assets
-  assetList = assetList.where((asset) => asset.report.amount != 0).toList();
-
+List<Widget> _buildAssetItems(List<AssetItem> assetList, BuildContext context) {
   return List.generate(assetList.length, (assetIndex) {
     AssetItem entry = assetList[assetIndex];
     String assetId = entry.assetId;
