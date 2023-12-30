@@ -5,8 +5,8 @@ project, and being developed for both Android and iOS.
 
 It solves 2 problems:
 
-1. tracking multiple assets from multiple categories
-2. generating reports for custom date intervals
+1. Tracking multiple assets from multiple categories.
+2. Generating reports for custom date intervals.
 
 <img src="readme_images/howmuch.png" width = 350>
 
@@ -42,11 +42,13 @@ only one solution left:
 You enter your assets (manually, for security reasons), and HowMuch keeps track of your portfolio.
 
 HowMuch categorizes your assets, and generates reports for you.
-These reports include:  how much has:
+These reports include, **HowMuch have**:
 
 - your portfolio,
 - your categories,
-- and your assets changed.
+- and your assets
+
+changed.
 
 These reports are super intuitive and easy to understand, you can inspect them at 3 different
 levels (from general to detailed):
@@ -60,12 +62,12 @@ HowMuch displays the reports it generates to you at 3 different levels:
     - rate change of your overall balance
     - deposit/withdrawal
     - amount change
-2. **Category level** (per category, for example: stock) -> _[mid-level details]_
+2. **Category level** (per category, for example: stock) -> _[mid-level summary]_
     - current balance of the category: total amount of assets in this category
     - rate change for the category
     - deposit/withdrawal
     - amount change
-3. **Asset level** (per asset, for example: AAPL) -> _[low-level details]_
+3. **Asset level** (per asset, for example: AAPL) -> _[low-level summary]_
     - total amount of the asset
     - rate change for the asset
     - amount change
@@ -80,16 +82,17 @@ HowMuch displays the reports it generates to you at 3 different levels:
 
 ## Features:
 
-- you can add assets from the following categories:
+- You can add assets from the following categories:
     - Stocks (AAPL, AMZN, etc.)
     - Crypto currencies (BTC, ETH, etc.)
     - Forex (USD, EUR, gold, platinum, etc.)
-- your assets will be grouped by their categories
-- you can assign custom categories to your assets
-- you can track your portfolio by daily generated reports
-- you can enter custom dates for reports: a custom report will be generated for all the change
+    - Bist100 (AKBNK, THYAO, etc.)
+- Your assets will be grouped by their categories.
+- You can assign custom categories to your assets.
+- You can track your portfolio by daily generated reports.
+- You can enter custom dates for reports: a custom report will be generated for all the change
   happened in your portfolio during the time you entered.
-- top gainers and top losers will be displayed for the report
+- Top gainers and top losers will be displayed for the report.
 
 ### Top Gainers & Losers
 
@@ -101,13 +104,13 @@ HowMuch displays the reports it generates to you at 3 different levels:
 
 ## What does an open-source mobile application mean?
 
-- it means, you can be a part of this application!
-- you can submit new feature requests
-- you can submit bug reports
-- you can submit your PR, and can enhance the application w.r.t your needs (if they align with the
-  communities as well)
-- if you are just learning, or curious, just take a look at the source-code!
-- and all your contribution will be visible at your phone, every time you use this application
+- It means, you can be a part of this application!
+- You can submit new feature requests,
+- You can submit bug reports,
+- You can submit your PR, and can enhance the application w.r.t your needs (if they align with the
+  community's as well).
+- If you are just learning, or curious, just take a look at the source-code!
+- And all your contribution will be there at your phone, every time you use this application.
 
 ## But deploying a mobile app is not free? How come this is open-sourced?
 
@@ -127,27 +130,28 @@ the code is written the way it is.
 
 ### Flutter
 
-- GetX is used for state management (controllers, routing, etc.)
-- tried to keep it as native and as minimal as possible
-- it's my first time writing Flutter, so you better lower your expectations :D
-- this was a side-hustle, and somewhat a quick and dirty solution. Unfortunately, I did not have the
-  time spend extra effort on mobile-app testing. Feel free to open a PR for introducing tests on the
-  Flutter side
+- GetX is used for state management (controllers, routing, etc.).
+- Tried to keep it as native and as minimal as possible.
+- It's my first time writing Flutter, so you better lower your expectations :D
+- This was a side-hustle, and somewhat a quick and dirty solution. Unfortunately, I did not have the
+  extra time to spend on mobile-app testing. Feel free to open a PR for introducing tests on the
+  Flutter side (we have tests on the Firebase side for TypeScript).
 
 ### Firebase
 
-- nothing weird going on here, tried to follow most up-to-date best practices.
-- client cannot access firestore directly, has to call cloud functions for interacting with the
+- Nothing weird going on here, tried to follow most up-to-date best practices.
+- Client cannot access Firestore directly, has to call cloud functions for interacting with the
   database.
-- tests are present, so you can take a look at them to get the big picture of the server.
-- you won't see the firebase related configurations and files in the repository. This was a
+- Tests are present, so you can take a look at them to get the big picture of the server.
+- You won't see the Firebase related configurations and files in the repository. This was a
   deliberate choice. These config files might be confusing for the ones who will create their own
-  firebase project (these config files are generated automatically). And sharing them here will
+  firebase project (they are generated automatically). And sharing them here will
   serve no purpose for the development of the app.
-- the code for the firebase backend can be found in this [repo](https://github.com/ozgunozerk/howmuch_firebase)
+- the code for the Firebase backend can be found in
+  this [repo](https://github.com/ozgunozerk/howmuch_firebase)
 
 ## Non-code contributors (alphabetical order)
 
-- [Canberk Karakaş](https://www.instagram.com/canberk1.0/) (logo / splash screen)
-- [Cem Tunaboylu](https://github.com/cemtunaboylu) (technical discussions)
-- [İlayda Özgül](https://www.behance.net/laydazgl) (UI/UX - Figma)
+- [Canberk Karakaş](https://www.instagram.com/canberk1.0/) (created the logo / splash screen)
+- [Cem Tunaboylu](https://github.com/cemtunaboylu) (technical discussions on backend architecture)
+- [İlayda Özgül](https://www.behance.net/laydazgl) (made improvements on UI/UX - Figma)
