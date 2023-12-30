@@ -139,7 +139,7 @@ class LoginController extends GetxController {
 
   String get displayName {
     try {
-      return " ${_firebaseUser!.displayName!}";
+      return " ${_firebaseUser!.displayName!.split(" ")[0]}";
     } catch (_) {
       // cannot fetch display name if the auth provider is apple
       return "";
