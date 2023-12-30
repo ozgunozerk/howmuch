@@ -28,7 +28,6 @@ class ReportController extends GetxController {
   final _report = Report.empty().obs;
 
   final _topGainers = <AssetItem>[].obs;
-  final _topGainersPerCategory = <Category, List<AssetItem>>{}.obs;
   final _soldAssets = <AssetItem>[].obs;
 
   // date controller will set the dates,
@@ -103,7 +102,7 @@ class ReportController extends GetxController {
       // they should have at least 1 snapshot
     }
 
-    // set start and end snapshot content, they will be useful
+    // set start and end snapshot content, they will be useful later
     _startSnapshotContent = filteredSnapshotEntries.first.value;
     _endSnapshotContent = filteredSnapshotEntries.last.value;
 
@@ -382,27 +381,19 @@ class ReportController extends GetxController {
       return b.report.rateChange.compareTo(a.report.rateChange);
     });
 
-    Map<Category, List<AssetItem>> topGainersPerCategory = {};
-
-    // Group the assets by category
-    for (AssetItem asset in assets) {
-      topGainersPerCategory.putIfAbsent(asset.category, () => []).add(asset);
-    }
-
     _topGainers.value = assets;
-    _topGainersPerCategory.value = topGainersPerCategory;
   }
 
-  Map<AssetType, List<AssetItem>> get topGainersPerCategory =>
-      _topGainersPerCategory.toJson();
-
   List<AssetItem> get topGainers => _topGainers
-      .where((element) => element.report.rateChange.isGreaterThan(0))
+      .where((element) =>
+          element.report.rateChange.isGreaterThan(0) &&
+          element.report.amount > 0)
       .take(5)
       .toList();
 
   List<AssetItem> get topLosers => _topGainers.reversed
-      .where((element) => element.report.rateChange.isNegative)
+      .where((element) =>
+          element.report.rateChange.isNegative && element.report.amount > 0)
       .take(5)
       .toList();
 
@@ -410,6 +401,7 @@ class ReportController extends GetxController {
 
   List<AssetItem> categoryAssets(Category category) {
     return _report.value.categories[category]!.assets.entries
+        .where((assetEntry) => assetEntry.value.amount > 0)
         .map((assetEntry) => AssetItem(
               assetEntry.key.item2,
               assetEntry.value,
