@@ -40,8 +40,7 @@ class DashboardPage extends StatelessWidget {
                 const Padding(padding: EdgeInsets.only(top: 24)),
                 Row(
                   children: [
-                    Text(
-                        "👋 Welcome${loginController.displayName.split(" ")[0]}!",
+                    Text("👋 Welcome${loginController.displayName}!",
                         style: welcomeTextStyle),
                     const Spacer(),
                     CircleAvatar(
