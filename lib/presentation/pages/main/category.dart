@@ -70,29 +70,28 @@ class CategoryPage extends StatelessWidget {
                 const Padding(padding: EdgeInsets.all(12)),
                 Center(child: IntervalChipWidget(color: categoryChip)),
                 const Padding(padding: EdgeInsets.all(4)),
-                Obx(
-                  () => SizedBox(
-                    height: 280,
-                    child: CategoryCard(
-                      totalAmount:
-                          reportController.categoryTotalSumOfAssets(category),
-                      deposit: reportController.categoryTotalDeposits(category),
-                      profit:
-                          reportController.categoryTotalAssetsProfit(category),
-                      rateChange: reportController
-                          .categoryTotalAssetsRateChange(category),
-                      dataPoints:
-                          reportController.dataPointsPerCategory[category]!,
-                      gradientColors: bigCategoryGradient,
-                      lineColor: howWhite,
-                      backgroundColor: categoryCardColor,
-                    ),
-                  ),
-                ),
+                Obx(() => SizedBox(
+                      height: 280,
+                      child: CategoryCard(
+                        totalAmount:
+                            reportController.categoryTotalSumOfAssets(category),
+                        deposit:
+                            reportController.categoryTotalDeposits(category),
+                        profit: reportController
+                            .categoryTotalAssetsProfit(category),
+                        rateChange: reportController
+                            .categoryTotalAssetsRateChange(category),
+                        dataPoints:
+                            reportController.dataPointsPerCategory[category]!,
+                        gradientColors: bigCategoryGradient,
+                        lineColor: howWhite,
+                        backgroundColor: categoryCardColor,
+                      ),
+                    )),
                 const Padding(padding: EdgeInsets.all(20)),
                 const Text("Assets", style: heading2TextStyle),
-                StaticAssetList(
-                    assetList: reportController.categoryAssets(category)),
+                Obx(() => StaticAssetList(
+                    assetList: reportController.categoryAssets(category))),
               ],
             ),
           ),
