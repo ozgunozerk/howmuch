@@ -134,8 +134,8 @@ class AddNewAsset extends StatelessWidget {
                 child: IntrinsicWidth(
                   child: TextField(
                     controller: addNewAssetController.amountTextController,
-                    // keyboardType: const TextInputType.numberWithOptions(
-                    //     decimal: true, signed: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.zero,
                       isDense: true,
