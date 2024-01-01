@@ -61,7 +61,7 @@ const TextStyle assetTextStyle = TextStyle(
 
 TextStyle changeTextStyle(double change) {
   return TextStyle(
-    fontSize: 14,
+    fontSize: 13,
     color: change.isNegative ? red : green,
   );
 }

@@ -62,7 +62,8 @@ class SmallCategoryCard extends StatelessWidget {
                         controller.displayCurrencyWithoutSign(totalAmount),
                         style: smallCategoryHeaderTextStyle)),
                     Obx(() => Text(
-                        controller.displayCurrencyWithSign2Decimals(profit),
+                        controller.displayCurrencyWithSign(profit,
+                            displayPositiveSign: true),
                         style: smallCategoryChangeTextStyle(profit))),
                   ],
                 ),
