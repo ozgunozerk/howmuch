@@ -67,7 +67,7 @@ class StaticAssetCard extends StatelessWidget {
                         style: assetTextStyle,
                       )),
                   Obx(() => Text(
-                        "${controller.displayCurrencyWithSign2Decimals(profit)}  (${formatWithSign2Decimal(rateChange)}%)",
+                        "${controller.displayCurrencyWithSign(profit, displayPositiveSign: true)} (${formatWithSign2Decimal(rateChange, displayPositiveSign: true)}%)",
                         style: changeTextStyle(profit),
                       )),
                 ],

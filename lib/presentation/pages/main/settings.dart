@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:how_much/presentation/ui/colours.dart';
-import 'package:how_much/util/helper_funcs.dart';
 import 'package:ionicons/ionicons.dart';
 
 import 'package:how_much/controllers/auth.dart';

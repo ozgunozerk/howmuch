@@ -1,22 +1,23 @@
 import 'package:intl/intl.dart';
 
-final numFormatter = NumberFormat("#,###.##", "en_US");
+final numFormatter = NumberFormat("#,##0.00", "en_US");
 
-String formatWithSign2Decimal(double myDouble) {
-  if (myDouble == 0) {
-    return '0.00';
-  }
-
+String formatWithSign2Decimal(double myDouble,
+    {bool displayPositiveSign = false, String symbol = ''}) {
   String formatted = numFormatter.format(myDouble);
 
-  // Add the leading zero if not present
-  // negative case
-  if (formatted.startsWith('-.')) {
-    formatted = formatted.replaceFirst('-.', '-0.');
+  // Add the positive sign if required
+  if (displayPositiveSign && !formatted.startsWith('-')) {
+    formatted = "+$formatted";
   }
-  // positive case
-  if (formatted.startsWith('.')) {
-    formatted = formatted.replaceFirst('.', '0.');
+
+  // If symbol is given, add it before the first number
+  if (symbol != '') {
+    int insertIndex =
+        formatted.startsWith('-') ? 1 : (displayPositiveSign ? 1 : 0);
+    formatted = formatted.substring(0, insertIndex) +
+        symbol +
+        formatted.substring(insertIndex);
   }
 
   return formatted;

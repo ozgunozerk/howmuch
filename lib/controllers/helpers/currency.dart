@@ -50,12 +50,13 @@ class CurrencyController extends GetxController {
   }
 
   String displayCurrencyWithoutSign(double value) {
-    return formatWithoutSign(value * getCurrencyConversionRate) +
-        getCurrencySymbol;
+    return getCurrencySymbol +
+        formatWithoutSign(value * getCurrencyConversionRate);
   }
 
-  String displayCurrencyWithSign2Decimals(double value) {
-    return formatWithSign2Decimal(value * getCurrencyConversionRate) +
-        getCurrencySymbol;
+  String displayCurrencyWithSign(double value,
+      {bool displayPositiveSign = false}) {
+    return formatWithSign2Decimal(value * getCurrencyConversionRate,
+        displayPositiveSign: displayPositiveSign, symbol: getCurrencySymbol);
   }
 }

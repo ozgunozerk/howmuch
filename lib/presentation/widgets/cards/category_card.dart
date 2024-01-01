@@ -150,7 +150,7 @@ class CategoryCard extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(controller.displayCurrencyWithSign2Decimals(profit),
+            Text(controller.displayCurrencyWithSign(profit),
                 style: categoryProfitDepositAmountTextStyle),
             const Text("profit",
                 style: categoryProfitDepositDescriptorTextStyle)
