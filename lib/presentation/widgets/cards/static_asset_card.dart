@@ -12,6 +12,7 @@ import 'package:how_much/util/symbol_to_icon.dart';
 class StaticAssetCard extends StatelessWidget {
   final AssetType assetType;
   final String assetId;
+  final double amount;
   final double value;
   final double profit;
   final double rateChange;
@@ -20,6 +21,7 @@ class StaticAssetCard extends StatelessWidget {
   const StaticAssetCard({
     super.key,
     required this.assetId,
+    required this.amount,
     required this.value,
     required this.profit,
     required this.assetType,
@@ -45,14 +47,24 @@ class StaticAssetCard extends StatelessWidget {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  padding: const EdgeInsets.only(left: 12, right: 14),
                   child: assetIdToIcon(assetId, assetType),
                 ),
-                Text(
-                  assetType == AssetType.crypto
-                      ? cryptoIdToSymbol(assetId).toUpperCase()
-                      : assetId.toUpperCase(),
-                  style: assetTextStyle,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      assetType == AssetType.crypto
+                          ? cryptoIdToSymbol(assetId).toUpperCase()
+                          : assetId.toUpperCase(),
+                      style: assetTextStyle,
+                    ),
+                    Text(
+                      formatWithoutSign(amount),
+                      style: amountTextStyle,
+                    ),
+                  ],
                 ),
               ],
             ),
