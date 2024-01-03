@@ -59,6 +59,13 @@ const TextStyle assetTextStyle = TextStyle(
   color: Colors.black,
 );
 
+/// AssetCard Text Styles
+const TextStyle amountTextStyle = TextStyle(
+  fontSize: 13,
+  fontWeight: FontWeight.w600,
+  color: howBlack,
+);
+
 TextStyle changeTextStyle(double change) {
   return TextStyle(
     fontSize: 13,

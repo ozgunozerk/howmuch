@@ -55,6 +55,7 @@ List<Widget> _buildAssetItems(List<AssetItem> assetList, BuildContext context) {
       children: [
         StaticAssetCard(
             assetId: assetId,
+            amount: assetReport.amount,
             value: assetReport.endValue,
             assetType: assetType,
             borderRadius: borderRadius,
