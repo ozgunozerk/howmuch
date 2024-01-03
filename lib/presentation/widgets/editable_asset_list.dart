@@ -184,7 +184,8 @@ List<Widget> _buildAssetItems(
             feedback: Material(
               child: EditableAssetCard(
                 assetId: assetId,
-                amount: assetData.amount.toString(),
+                amount: assetData.amount,
+                value: assetData.value,
                 assetType: assetType,
                 borderRadius: borderRadius,
               ),
@@ -192,7 +193,8 @@ List<Widget> _buildAssetItems(
             childWhenDragging: const SizedBox(),
             child: EditableAssetCard(
               assetId: assetId,
-              amount: assetData.amount.toString(),
+              amount: assetData.amount,
+              value: assetData.value,
               assetType: assetType,
               borderRadius: borderRadius,
             ),
