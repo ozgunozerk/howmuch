@@ -51,6 +51,12 @@ class MyApp extends StatelessWidget {
         getPages: AppPages.list,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+          )),
           fontFamily: "Roboto",
           colorSchemeSeed: primary,
           useMaterial3: true,
