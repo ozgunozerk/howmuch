@@ -171,7 +171,7 @@ class LoginController extends GetxController {
         await prefs.clear();
       }
     } catch (e) {
-      showErrorDialog("Couldn't delete account: $e");
+      showErrorDialog("Couldn't delete account", "$e");
     }
   }
 
@@ -187,7 +187,7 @@ class LoginController extends GetxController {
 
       await _firebaseUser!.delete();
     } catch (e) {
-      showErrorDialog("An error occurred during re-authentication: $e");
+      showErrorDialog("An error occurred during re-authentication", "$e");
     }
   }
 }

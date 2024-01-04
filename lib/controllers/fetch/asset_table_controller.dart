@@ -63,10 +63,9 @@ class AssetTableController extends GetxController {
       await _setLastFetchTimestamp(DateTime.now());
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to fetch asset table: $e');
+        print("Failed to fetch asset table due to: $e");
       }
-      showErrorDialog(
-          "There was a problem communicating with the server. Please try again later.");
+      showErrorDialog("Failed to fetch asset table", "$e");
     }
   }
 
@@ -127,7 +126,7 @@ class AssetTableController extends GetxController {
         if (kDebugMode) {
           print("cannot parse asset table json from device, because: $e");
         }
-        showErrorDialog("Couldn't parse asset table json from device.");
+        showErrorDialog("Couldn't parse asset table from device", "$e");
       }
     }
     return null;

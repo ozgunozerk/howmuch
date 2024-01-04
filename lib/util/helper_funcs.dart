@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tuple/tuple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:how_much/controllers/fetch/asset_table_controller.dart';
 import 'package:how_much/controllers/user_assets_controller.dart';
@@ -127,19 +128,39 @@ loadingAnimation() {
   );
 }
 
-void showErrorDialog(String errorText) {
+void showErrorDialog(String errorText, String detail) {
   Get.dialog(
     AlertDialog(
       title: const Text("Error"),
       content: Text(errorText),
       actions: <Widget>[
         TextButton(
+          onPressed: () {
+            launchUrl(Uri.parse(fillIssue(errorText, detail)));
+            Get.back();
+          },
+          child: const Text("Submit this to GitHub"),
+        ),
+        TextButton(
           onPressed: () => Get.back(),
-          child: const Text("OK"),
+          child: const Text("Ok"),
         ),
       ],
     ),
   );
+}
+
+String fillIssue(String error, String detail) {
+  String encodedError = Uri.encodeComponent(error);
+  String encodedDetail = Uri.encodeComponent(detail);
+
+  String baseURL =
+      'https://github.com/ozgunozerk/howmuch/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml';
+
+  String titleParam = 'title=$encodedError';
+  String whatHappenedParam = 'what-happened=$encodedDetail';
+
+  return '$baseURL&$titleParam&$whatHappenedParam';
 }
 
 String getPreviousUpdateTime(DateTime timestamp) {

@@ -26,7 +26,7 @@ class TransactionsController extends GetxController {
       final HttpsCallableResult result = await callable.call();
 
       if (result.data is! Map) {
-        throw 'transaction data is not a map';
+        throw "transaction data is not a map";
       }
 
       if (result.data.isEmpty) {
@@ -39,10 +39,9 @@ class TransactionsController extends GetxController {
       await _processTransactions(transactions);
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to fetch transactions: $e');
+        print("Failed to fetch transactions due to: $e");
       }
-      showErrorDialog(
-          "There was a problem communicating with the server. Please try again later.");
+      showErrorDialog("Failed to fetch transactions", "$e");
     }
     return true;
   }

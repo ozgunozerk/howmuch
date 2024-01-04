@@ -42,10 +42,10 @@ class PriceTablesController extends GetxController with WidgetsBindingObserver {
         priceTables = PriceTables.fromMap(jsonDecode(storedPriceTables));
         lastPriceTableDateUTC = priceTables.priceTableMap.keys.last;
       } catch (e) {
-        showErrorDialog("cannot parse price tables json from device");
         if (kDebugMode) {
           print("cannot parse price tables json from device, because: $e");
         }
+        showErrorDialog("cannot parse price tables from device", "$e");
       }
     } else {
       // there may be no local priceTable in device (i.e. first install)
@@ -82,8 +82,7 @@ class PriceTablesController extends GetxController with WidgetsBindingObserver {
       if (kDebugMode) {
         print("fetching and setting the price tables failed due to error: $e");
       }
-      showErrorDialog(
-          "There was a problem communicating with the server. Please try again later.");
+      showErrorDialog("fetching and setting price tables", "$e");
     }
   }
 
