@@ -88,14 +88,14 @@ class EditableAssetList extends StatelessWidget {
                         ),
                       );
                     },
-                    onAccept: (droppedData) {
+                    onAcceptWithDetails: (dropped) {
                       // Handle the asset drop here
                       // You can use userAssetsController methods to update categories
                       // For example:
                       userAssetsController.changeAssetCategory(
-                        droppedData.assetId,
-                        droppedData.assetType,
-                        droppedData.category,
+                        dropped.data.assetId,
+                        dropped.data.assetType,
+                        dropped.data.category,
                         category,
                       );
                     },
