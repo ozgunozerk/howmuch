@@ -183,8 +183,7 @@ class UserAssetsController extends GetxController {
       try {
         await callable.call(_transactions.value.toMap());
       } catch (e) {
-        showErrorDialog(
-            "There was a problem communicating with the server. Please try again later.");
+        showErrorDialog("Couldn't send transaction to server", "$e");
         return;
       }
 

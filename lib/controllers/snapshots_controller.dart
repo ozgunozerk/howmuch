@@ -83,7 +83,7 @@ class SnapshotsController extends GetxController {
         if (kDebugMode) {
           print("loading/setting snapshots from device failed with error: $e");
         }
-        showErrorDialog("cannot load snapshots from device!");
+        showErrorDialog("loading snapshots from device failed", "$e");
       }
       return true;
     }
