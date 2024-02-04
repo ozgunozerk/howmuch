@@ -259,6 +259,9 @@ class ReportController extends GetxController {
           );
 
           // we set `endValue` and `amount` later
+          if (assetUid.item2 == 'link' || assetUid.item2 == 'chainlink') {
+            print("price: ${currentAssetData!.price}, for i: $i");
+          }
 
           // Calculate the deposit/withdrawal for each asset, category, and report
           double amountDiff;
@@ -360,6 +363,24 @@ class ReportController extends GetxController {
               return AssetItem(assetId, assetReport, category, assetType);
             }))
         .toList();
+
+    _report.value.categories.entries
+        .where((categoryEntry) => categoryEntry.key == 'crypto')
+        .forEach((categoryEntry) {
+      categoryEntry.value.assets.entries
+          .where((assetEntry) =>
+              assetEntry.key.item2 == 'chainlink' ||
+              assetEntry.key.item2 == 'link')
+          .forEach((assetEntry) {
+        print("start value: ${assetEntry.value.startValue}");
+        print("end value: ${assetEntry.value.endValue}");
+        print("deposit: ${assetEntry.value.deposit}");
+        print("withdrawal: ${assetEntry.value.withdrawal}");
+        print("net deposit: ${assetEntry.value.netDeposit}");
+        print("profit: ${assetEntry.value.profit}");
+        print("rate change: ${assetEntry.value.rateChange}");
+      });
+    });
   }
 
   void _calculateTopGainers() {
