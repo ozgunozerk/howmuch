@@ -140,6 +140,7 @@ class AssetEdit extends StatelessWidget {
                       userAssetsController.changeAssetCategory(
                           assetId, assetType, category, newCategory);
                     }
+                    editAssetController.resetValues();
                   }
                   Navigator.pop(context);
                 },
