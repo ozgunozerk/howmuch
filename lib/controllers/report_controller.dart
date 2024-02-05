@@ -349,6 +349,7 @@ class ReportController extends GetxController {
         .typeMap
         .entries
         .expand((typeEntry) => typeEntry.value.entries
+                // find the sold assets and get their report
                 .where((assetEntry) => assetEntry.value.amount == 0)
                 .map((assetEntry) {
               AssetType assetType = typeEntry.key;
@@ -359,6 +360,9 @@ class ReportController extends GetxController {
 
               return AssetItem(assetId, assetReport, category, assetType);
             }))
+        .where((assetItem) =>
+            // if the asset is sold long before the selected interval, no need to display it
+            assetItem.report.startValue != 0 || assetItem.report.deposit != 0)
         .toList();
   }
 
