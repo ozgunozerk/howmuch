@@ -525,11 +525,15 @@ class PriceTable {
   factory PriceTable.fromMap(Map<String, dynamic> mapObject) {
     Map<AssetType, PriceTableEntries> data =
         mapObject.map((type, priceTableEntriesMap) {
-      AssetType assetType = AssetTypeHelper.fromString(type);
-      PriceTableEntries entries = PriceTableEntries.fromMap(
-          Map<String, num>.from(priceTableEntriesMap));
+      try {
+        AssetType assetType = AssetTypeHelper.fromString(type);
+        PriceTableEntries entries = PriceTableEntries.fromMap(
+            Map<String, num>.from(priceTableEntriesMap));
 
-      return MapEntry(assetType, entries);
+        return MapEntry(assetType, entries);
+      } catch (e) {
+        throw Exception("conversion error: $e, in category: $type");
+      }
     });
 
     return PriceTable._(data);
@@ -575,8 +579,13 @@ class PriceTables {
         if (priceTable is! Map) {
           throw 'incorrect type';
         }
-        return MapEntry(
-            date, PriceTable.fromMap(Map<String, dynamic>.from(priceTable)));
+        try {
+          MapEntry<String, PriceTable> mapEntry = MapEntry(
+              date, PriceTable.fromMap(Map<String, dynamic>.from(priceTable)));
+          return mapEntry;
+        } catch (e) {
+          throw Exception("$e with price table date: $date");
+        }
       }),
     );
 
