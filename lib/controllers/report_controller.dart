@@ -223,12 +223,12 @@ class ReportController extends GetxController {
         }
 
         // Union set of asset keys
-        Set<AssetUid> allAssetKeys = {
+        Set<AssetUid> currAndNextAssets = {
           ...currentAssets.keys,
           ...nextAssets.keys
         };
 
-        for (AssetUid assetUid in allAssetKeys) {
+        for (AssetUid assetUid in currAndNextAssets) {
           Asset? currentAssetData = currentAssets[assetUid];
           Asset? nextAssetData = nextAssets[assetUid];
 
@@ -258,7 +258,7 @@ class ReportController extends GetxController {
             ),
           );
 
-          // we set `endValue` and `amount` later
+          // we will set the `endValue` and `amount` later
 
           // Calculate the deposit/withdrawal for each asset, category, and report
           double amountDiff;
@@ -325,7 +325,9 @@ class ReportController extends GetxController {
       _report.value.categories[category]!.endValue =
           endAssets.values.fold<double>(0.0, (sum, asset) => sum + asset.value);
 
-      // we don't need `endValue` and `amount` for sold Assets, so leaving them as `0` is fine
+      // fill `endValue` and `amount` for individual assets
+      // default value was `0` for both of these fields,
+      // so we only need to change these fields for the assets in `endAssets`
       for (MapEntry<AssetUid, Asset> asset in endAssets.entries) {
         _report.value.categories[category]!.assets[asset.key]!.endValue =
             asset.value.value;
@@ -338,6 +340,23 @@ class ReportController extends GetxController {
           _report.value.categories[category]!.startValue;
 
       _report.value.endValue += _report.value.categories[category]!.endValue;
+
+      // TODO:
+      // 1. take the union of `startAssets` and `endAssets`
+      // 2. for each asset in this union, fetch their prices for the start and end date
+      // 3. calculate the rate change from these prices
+      // 4. per asset, multiply the rate change with their value, and add it to a variable called cat_rate_change
+      // 5. per each category, divide the cat_rate_change with the total value of the category to find the category's rate change
+      // 6. per each category, add cat_rate_change to a variable called total_rate_change
+      // 7. divide total_rate_change with total amount of the portfolio to find the portfolio's rate change
+
+      // Union set of asset keys
+      Set<AssetUid> allAssets = {...startAssets.keys, ...endAssets.keys};
+
+      String beginDate = _dateRange.value.item1;
+      String endDate = _dateRange.value.item2;
+
+      for (AssetUid asset in allAssets) {}
     }
 
     // now we have filled every field necessary in our classes!
