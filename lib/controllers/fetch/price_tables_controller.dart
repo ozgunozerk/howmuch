@@ -107,8 +107,25 @@ class PriceTablesController extends GetxController with WidgetsBindingObserver {
             priceTableDateUTC.subtract(const Duration(hours: 6)));
       }
 
-      return priceTables.priceTableMap[priceTableDateString]!.data[assetType]
-          ?.entries[assetId];
+      final PriceTable? priceTable =
+          priceTables.priceTableMap[priceTableDateString];
+      if (priceTable == null) {
+        throw Exception('Price table for $priceTableDateString not found.');
+      } else {
+        final PriceTableEntries? assetData = priceTable.data[assetType];
+        if (assetData == null) {
+          throw Exception(
+              'Asset type $assetType not found in $priceTableDateString.');
+        } else {
+          final double? entry = assetData.entries[assetId];
+          if (entry == null) {
+            throw Exception(
+                'Entry with assetId $assetId is null in $priceTableDateString.');
+          } else {
+            return entry;
+          }
+        }
+      }
     }
   }
 }
