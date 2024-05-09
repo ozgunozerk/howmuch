@@ -245,10 +245,10 @@ class SnapshotsController extends GetxController {
     snapshots.snapshotMap[snapshotDate] = assets;
   }
 
-  Future<void> generateMissingSnapshots(DateTime tillDate) async {
+  Future<void> generateMissingSnapshots(DateTime includingTillDate) async {
     // calculate how many snapshots we have to generate
     DateTime lastSnapshotDateUTC = parseDateWithHour(_lastSnapshotDateUTC);
-    int hourDiff = tillDate.difference(lastSnapshotDateUTC).inHours;
+    int hourDiff = includingTillDate.difference(lastSnapshotDateUTC).inHours;
 
     int missedSnapshotCount = hourDiff ~/ 6;
 

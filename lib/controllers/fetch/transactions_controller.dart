@@ -84,6 +84,9 @@ class TransactionsController extends GetxController {
           previousSnapshotDate.add(const Duration(hours: 6));
       String nextSnapshotDateString = formatDateWithHour(nextSnapshotDate);
 
+      // TODO: if `nextSnapshotDate` is later than `now`, don't call `generateMissingSnapshots`
+      // or separate transactions into `finalized` and `non-finalized` and then process them
+
       if (nextSnapshotDate.difference(lastCreatedSnapshotDate).inHours > 0) {
         // means we need to create a new snapshot
         _snapshotsController.generateMissingSnapshots(nextSnapshotDate);
