@@ -6,16 +6,15 @@ import 'package:how_much/custom_types.dart';
 
 class EditAssetController extends GetxController {
   final _selectedCategory = "crypto".obs;
-  final amount = 0.0.obs;
+  final amount = Rxn<double>();
 
   final TextEditingController amountTextController = TextEditingController();
 
   EditAssetController() {
     // Listen for changes in the text fields and update them accordingly
     amountTextController.addListener(() {
-      double? parsedAmount =
+      amount.value =
           double.tryParse(amountTextController.text.replaceAll(',', '.'));
-      amount.value = parsedAmount ?? 0.0;
     });
   }
 
@@ -30,7 +29,7 @@ class EditAssetController extends GetxController {
   void resetValues() {
     _selectedCategory.value = "crypto";
 
-    amount.value = 0.0;
+    amount.value = null;
     amountTextController.text = "";
   }
 
