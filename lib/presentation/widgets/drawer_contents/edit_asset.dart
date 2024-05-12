@@ -130,8 +130,8 @@ class AssetEdit extends StatelessWidget {
                 small: true,
                 onTap: () {
                   {
-                    double newAmount = editAssetController.amount.value;
-                    if (newAmount != 0) {
+                    double? newAmount = editAssetController.amount.value;
+                    if (newAmount != null) {
                       userAssetsController.updateAssetAmount(category,
                           assetType, assetId, newAmount - currentAmount);
                     }
